@@ -1,0 +1,86 @@
+* {
+  all: unset; //Unsets everything so you can style everything from scratch
+}
+
+.icon-module {
+  margin: 0 5px;
+  & > &__icon {
+    margin-right: 5px;
+    font-family: "Font Awesome 5 Free Solid";
+  }
+}
+//Global Styles
+.bar {
+  background-color: #0d1117;
+  color: #b0b4bc;
+  padding: 5px;
+  font-size: 0.9em;
+  font-family: Hack Regular;
+}
+
+.bottombar {
+  background-color: #0d1117;
+  color: #b0b4bc;
+  padding: 5px;
+  font-size: .8em;
+  font-family: Hack Regular;
+}
+
+// Styles on classes (see eww.yuck for more information)
+
+.sidestuff slider {
+  all: unset;
+  color: #ffd5cd;
+}
+
+.metric scale trough highlight {
+  all: unset;
+  background-color: #98971a;
+  color: #000000;
+  border-radius: 10px;
+}
+.metric scale trough {
+  all: unset;
+  background-color: #4e4e4e;
+  border-radius: 50px;
+  min-height: 3px;
+  min-width: 50px;
+  margin-left: 10px;
+  margin-right: 20px;
+}
+.metric scale trough highlight {
+  all: unset;
+  background-color: #98971a;
+  color: #000000;
+  border-radius: 10px;
+}
+.metric scale trough {
+  all: unset;
+  background-color: #4e4e4e;
+  border-radius: 50px;
+  min-height: 3px;
+  min-width: 50px;
+  margin-left: 10px;
+  margin-right: 20px;
+}
+.label-ram {
+  font-size: large;
+}
+
+.workspaces {
+  font-family: "Hack Regular";
+  font-size: 28px;
+  margin-right: 20px;
+
+  button {
+	color: #a89984;
+    margin: 0px 3px;
+  }
+  button.focused {
+    color: #98971a;
+  }
+  button.urgent {
+	color: #cc241d;
+  }
+
+}

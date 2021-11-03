@@ -1,0 +1,84 @@
+(defwidget bar []
+  (box :orientation "h"
+    (workspaces)
+    (music)
+    (sidestuff)))
+
+(defwidget bottombar []
+  (box :orientation "h"
+  (workspaces) ))
+
+(defwidget sidestuff []
+  (box :class "sidestuff" :orientation "h" :space-evenly false :halign "end" :spacing 10
+    (weather)
+    (metric :label "🔊"
+            :value volume
+            :onchange "amixer -D pulse sset Master {}%")
+    (metric :label ""
+            :value {EWW_RAM.used_mem_perc}
+            :onchange "")
+    (metric :label ""
+            :value {EWW_CPU.avg}
+            :onchange "")
+    time))
+
+(defwidget workspaces [] (literal :class "workspaces" :content "${workspace}"))
+
+(defwidget weather [] (literal :valign "center" :halign "center" :content "${weather}"))
+
+(defwidget music []
+  (box :class "music"
+       :orientation "h"
+       :space-evenly false
+       :halign "center"
+    {music != "" ? "🎵${music}" : ""}))
+
+
+(defwidget metric [label value onchange]
+  (box :orientation "h"
+       :class "metric"
+       :space-evenly false
+    (box :class "label" label)
+    (scale :min 0
+           :max 101
+           :active {onchange != ""}
+           :value value
+           :onchange onchange)))
+
+
+
+(deflisten music :initial ""
+  "playerctl --follow metadata --format '{{ artist }} - {{ title }}' || true")
+
+(deflisten workspace "workspaces 0")
+
+(defpoll weather :interval "60s"
+  "weather Northampton,UK")
+
+(defpoll volume :interval "1s"
+  "scripts/getvol")
+
+(defpoll time :interval "10s"
+  "date '+%H:%M %b %d, %Y'")
+
+(defwindow bar
+  :monitor 0
+  :windowtype "dock"
+  :geometry (geometry :x "0%"
+                      :y "0%"
+                      :width "90%"
+                      :height "10px"
+                      :anchor "top center")
+  :reserve (struts :side "top" :distance "4%")
+  (bar))
+
+(defwindow bottombar
+  :monitor 0
+  :windowtype "dock"
+  :geometry (geometry :x "0%"
+                      :y "0%"
+                      :width "90%"
+                      :height "10px"
+                      :anchor "bottom center")
+  :reserve (struts :side "bottom" :distance "4%")
+  (bottombar))
