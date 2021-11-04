@@ -1,0 +1,15 @@
+(defpoll weather :interval "60s" "weather Northampton,UK")
+
+(defpoll volume :interval "1s"  "scripts/getvol")
+
+(defpoll time :interval "10s"  "date '+%H:%M'")
+
+(defpoll date :interval "10s"  "date '+%b %d, %Y'")
+
+(defpoll wirelessId :interval "60s"  "iwgetid -r")
+
+(defpoll interfaceId :interval "60s" "iwgetid | awk '{print $1}'")
+
+(defpoll dockerContainers :interval "10s" "docker ps -qa | wc -l")
+
+(defpoll dockerImages :interval "10s" "docker images -qa | wc -l")

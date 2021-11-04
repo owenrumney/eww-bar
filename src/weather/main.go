@@ -9,7 +9,7 @@ import (
 	"strings"
 )
 
-var icons = map[string]string {
+var icons = map[string]string{
 	"01d": "\uF185", // day clear
 	"01n": "\uF186", // night clear
 	"02d": "\uF0C2", // day few clouds
@@ -30,12 +30,11 @@ var icons = map[string]string {
 	"50n": "\uF773", // night mist
 }
 
-
 type weather struct {
-	Weather []struct{
-		Main string `json:"main"`
+	Weather []struct {
+		Main        string `json:"main"`
 		Description string `json:"description"`
-		Icon string `json:"icon"`
+		Icon        string `json:"icon"`
 	} `json:"weather"`
 	Main struct {
 		FeelsLike float32 `json:"feels_like"`
@@ -47,28 +46,28 @@ func main() {
 		fmt.Println("Usage: weather [location]")
 		os.Exit(1)
 	}
-
 	appId := getAppId()
 	location := os.Args[1]
 	degrees := '\u2103'
-
 	weatherUrl := fmt.Sprintf("https://api.openweathermap.org/data/2.5/weather?units=Metric&appid=%s&q=%s", appId, location)
-
 	resp, err := http.Get(weatherUrl)
 	if err != nil || resp.StatusCode != http.StatusOK {
 		panic(err)
 	}
-
-	defer func() {_ = resp.Body.Close()}()
-
+	defer func() { _ = resp.Body.Close() }()
 	var w weather
 	if err := json.NewDecoder(resp.Body).Decode(&w); err != nil {
 		panic(err)
 	}
-
-	fmt.Printf(`(box :orientation "h" :valign "center" (label :class "label" :text "%s %s, %.0f%c "))`, icons[w.Weather[0].Icon], w.Weather[0].Main, w.Main.FeelsLike, degrees)
+	data, _ := json.Marshal(struct {
+		Icon        string `json:"icon"`
+		Description string `json:"description"`
+	}{
+		Icon:        icons[w.Weather[0].Icon],
+		Description: fmt.Sprintf("%s, %.0f%c ", strings.Title(w.Weather[0].Description), w.Main.FeelsLike, degrees),
+	})
+	fmt.Printf("%s", string(data))
 }
-
 func getAppId() string {
 	homeDir, err := os.UserHomeDir()
 	if err != nil {

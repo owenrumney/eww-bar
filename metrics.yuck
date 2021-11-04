@@ -1,0 +1,11 @@
+(defwidget metric [label value ?onchange ?onclick]
+  (box :orientation "h"
+       :class "metric"
+       :space-evenly false
+    (button :onclick "${onclick}" (label :class "label" :text label))
+    (scale :class {value > 50 ? value > 75 ? "error" : "warning" : "normal"}
+           :min 0
+           :max 101
+           :active {onchange != ""}
+           :value value
+           :onchange onchange)))

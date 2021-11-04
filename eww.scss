@@ -2,19 +2,12 @@
   all: unset; //Unsets everything so you can style everything from scratch
 }
 
-.icon-module {
-  margin: 0 5px;
-  & > &__icon {
-    margin-right: 5px;
-    font-family: "Font Awesome 5 Free Solid";
-  }
-}
 //Global Styles
 .bar {
   background-color: #0d1117;
   color: #b0b4bc;
   padding: 5px;
-  font-size: 0.9em;
+  font-size: 1em;
   font-family: Hack Regular;
 }
 
@@ -22,11 +15,19 @@
   background-color: #0d1117;
   color: #b0b4bc;
   padding: 5px;
-  font-size: .8em;
+  font-size: 1em;
   font-family: Hack Regular;
 }
 
 // Styles on classes (see eww.yuck for more information)
+
+.icon-module {
+  margin: 0 5px;
+  & > &__icon {
+    margin-right: 5px;
+    font-family: "Font Awesome 5 Free Solid";
+  }
+}
 
 .sidestuff slider {
   all: unset;
@@ -39,21 +40,21 @@
   color: #000000;
   border-radius: 10px;
 }
-.metric scale trough {
+
+.metric scale.warning trough highlight {
   all: unset;
-  background-color: #4e4e4e;
-  border-radius: 50px;
-  min-height: 3px;
-  min-width: 50px;
-  margin-left: 10px;
-  margin-right: 20px;
-}
-.metric scale trough highlight {
-  all: unset;
-  background-color: #98971a;
+  background-color: #d79921;
   color: #000000;
   border-radius: 10px;
 }
+
+.metric scale.error trough highlight {
+  all: unset;
+  background-color: #cc241d;
+  color: #000000;
+  border-radius: 10px;
+}
+
 .metric scale trough {
   all: unset;
   background-color: #4e4e4e;
@@ -63,12 +64,18 @@
   margin-left: 10px;
   margin-right: 20px;
 }
+
 .label-ram {
   font-size: large;
 }
 
 .workspaces {
-  font-family: "Hack Regular";
+  background-color: #21262e;
+  border-radius: 15px;
+  padding-left: 10px;
+  padding-right: 5px;
+
+  font-family: "Hack NF Regular";
   font-size: 28px;
   margin-right: 20px;
 
@@ -83,4 +90,33 @@
 	color: #cc241d;
   }
 
+}
+
+.spotify {
+  font-size: 1em;
+  // border-radius: 20px;
+  background-color: #98971a;
+  color: #0d1117;
+}
+
+.spotify-text {
+  font-size: 1em;
+  background-color: #98971a;
+  color: #0d1117;
+  
+}
+
+.docker {
+  font-family: "Font Awesome 5 Brands";
+  // border-radius: 20px;
+  font-size: 1em;
+  background-color: #0db7ed;
+  color: #0d1117;
+}
+
+.github {
+  font-family: "Font Awesome 5 Brands";
+  font-size: 1em;
+  background-color: #fff;
+  color: #0d1117;
 }

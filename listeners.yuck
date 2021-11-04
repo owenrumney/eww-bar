@@ -1,0 +1,3 @@
+(deflisten music :initial "" "playerctl --follow metadata --format '{{ artist }} - {{ title }}' || true")
+
+(deflisten workspace "workspaces 0")

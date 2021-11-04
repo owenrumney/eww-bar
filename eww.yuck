@@ -1,30 +1,56 @@
+(include "listeners.yuck")
+(include "metrics.yuck")
+(include "pollers.yuck")
+(include "revealer.yuck")
+(include "variables.yuck")
+
 (defwidget bar []
-  (box :orientation "h"
-    (workspaces)
-    (music)
+  (centerbox :orientation "h"
+    (box :orientation "h" :space-evenly false (workspaces) )
+    (box :orientation "h" :space-evenly false (label :text " ${time} - ")  (weather) )
     (sidestuff)))
 
 (defwidget bottombar []
-  (box :orientation "h"
-  (workspaces) ))
+  (centerbox :orientation "h" :space-evenly false
+  (box :halign "start" :orientation "h" :space-evenly false (workspaces))
+  (box :halign "end" :orientation "h" :space-evenly false)
+   (box :orientation "h" :halign "end" :space-evenly false
+       (metric :label ""
+               :value {EWW_RAM.used_mem_perc})
+       (metric :label ""
+               :onclick "gnome-system-monitor"
+               :value {EWW_CPU.avg})
+      (metric  :label ""
+               :value "${round(EWW_DISK["/"].used_perc, 0)}")
+               (network)
+        )
+    )
+      )
+
+      (defwidget icon-module [icon ?class ?visible]
+  (box :class "${class} icon-module"
+       :orientation "h"
+       :halign "start"
+       :space-evenly false
+       :visible {visible ?: true} ; because the argument is optional
+    (label :class "icon-module__icon" :text "${icon}")
+    (children)))
 
 (defwidget sidestuff []
   (box :class "sidestuff" :orientation "h" :space-evenly false :halign "end" :spacing 10
-    (weather)
+  
     (metric :label "🔊"
             :value volume
             :onchange "amixer -D pulse sset Master {}%")
-    (metric :label ""
-            :value {EWW_RAM.used_mem_perc}
-            :onchange "")
-    (metric :label ""
-            :value {EWW_CPU.avg}
-            :onchange "")
-    time))
+
+    
+    (box :orientation "h" :spacing 2 :space-evenly false :halign "end" (spotify) (docker))))
 
 (defwidget workspaces [] (literal :class "workspaces" :content "${workspace}"))
 
-(defwidget weather [] (literal :valign "center" :halign "center" :content "${weather}"))
+(defwidget weather [] 
+  (icon-module :icon "${weather.icon}" 
+    (label :text "${weather.description}")))
 
 (defwidget music []
   (box :class "music"
@@ -34,32 +60,63 @@
     {music != "" ? "🎵${music}" : ""}))
 
 
-(defwidget metric [label value onchange]
-  (box :orientation "h"
-       :class "metric"
-       :space-evenly false
-    (box :class "label" label)
-    (scale :min 0
-           :max 101
-           :active {onchange != ""}
-           :value value
-           :onchange onchange)))
 
 
 
-(deflisten music :initial ""
-  "playerctl --follow metadata --format '{{ artist }} - {{ title }}' || true")
 
-(deflisten workspace "workspaces 0")
 
-(defpoll weather :interval "60s"
-  "weather Northampton,UK")
+(defwidget spotify [?class]
+  (box :space-evenly false
+       :class "hover-module ${class}"
+    (revealer-on-hover :class "hl-on-hover"
+                       :var revealSpotify
+                       :varname "revealSpotify"
+                       :transition "slideleft"
+                       :class "spotify"
+          
+      (hovered-sign :var revealSpotify 
+      (label :class "spotify" :text "")
+      (label :class "spotify" :text  ""))
+      (label :class "spotify" :text  " ${music} ")
+      "    ")))
 
-(defpoll volume :interval "1s"
-  "scripts/getvol")
+(defwidget docker [?class]
+  (box :space-evenly false
+       :class "hover-module ${class}"
+    (revealer-on-hover :class "hl-on-hover"
+                       :var revealDocker
+                       :varname "revealDocker"
+                       :transition "slideleft"
+                       :class "docker"
+          
+      (hovered-sign :var revealDocker 
+      (label :class "docker" :text "")
+      (label :class "docker" :text  ""))
+      (label :class "docker-text" :text  "  Running: ${dockerContainers}, Images: ${dockerImages} ")
+      "    ")))
 
-(defpoll time :interval "10s"
-  "date '+%H:%M %b %d, %Y'")
+(defwidget github [?class]
+  (box :space-evenly false
+       :class "hover-module ${class}"
+    (revealer-on-hover :class "hl-on-hover"
+                       :var revealGithub
+                       :varname "revealGithub"
+                       :transition "slideleft"
+                       :class "docker"
+          
+      (hovered-sign :var revealDocker 
+      (label :class "docker" :text "<")
+      (label  :class "docker" :text  "<"))
+      (label :class "docker-text" :text  "  Running: ${dockerContainers}, Images: ${dockerImages} ")
+      "    ")))
+
+
+
+
+
+
+
+(defwidget network []  (label :text "${wirelessId}: ${round(EWW_NET[interfaceId].NET_UP / 1000000, 2)}  ${round(EWW_NET[interfaceId].NET_DOWN / 1000000, 2)} "))
 
 (defwindow bar
   :monitor 0
@@ -82,3 +139,12 @@
                       :anchor "bottom center")
   :reserve (struts :side "bottom" :distance "4%")
   (bottombar))
+
+(defwidget icon-module [icon ?class ?visible]
+  (box :class "${class} icon-module"
+       :orientation "h"
+       :halign "end"
+       :space-evenly false
+       :visible {visible ?: true} ; because the argument is optional
+    (label :class "icon-module__icon" :text "${icon}")
+    (children)))

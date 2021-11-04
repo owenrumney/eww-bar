@@ -1,0 +1,26 @@
+(defwidget hovered-sign [var]
+  (box :space-evenly false
+      (revealer :reveal {!var}
+                :duration "100ms"
+                :transition "slideleft"
+        (children :nth 0)) 
+      (revealer :reveal {var}
+                :duration "100ms"
+                :transition "slideleft"
+        (children :nth 1)))) 
+
+; Revealer on hover, using children
+(defwidget revealer-on-hover [var varname ?class ?duration ?transition]
+  (box :class "${class} revealer-on-hover"
+       :orientation "h"
+       :space-evenly false
+    (eventbox :class "eventbox"
+              :onhover "eww update ${varname}=true"
+              :onhoverlost "eww update ${varname}=false"
+      (box :space-evenly false
+        (children :nth 0)
+        (revealer :reveal var
+                  :transition {transition ?: "slideright"}
+                  :duration {duration ?: "500ms"}
+          (children :nth 1))
+        (box :class "${class}" (children :nth 2))))))
