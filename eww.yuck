@@ -1,3 +1,5 @@
+; Add the includes 
+
 (include "listeners.yuck")
 (include "metrics.yuck")
 (include "pollers.yuck")
@@ -15,19 +17,19 @@
   (box :halign "start" :orientation "h" :space-evenly false (workspaces))
   (box :halign "end" :orientation "h" :space-evenly false)
    (box :orientation "h" :halign "end" :space-evenly false
-       (metric :label ""
+        (metric :icon ""
                :value {EWW_RAM.used_mem_perc})
-       (metric :label ""
+        (metric :icon ""
                :onclick "gnome-system-monitor"
                :value {EWW_CPU.avg})
-      (metric  :label ""
+        (metric  :icon ""
                :value "${round(EWW_DISK["/"].used_perc, 0)}")
-               (network)
-        )
+        (network)
     )
-      )
+  )
+)
 
-      (defwidget icon-module [icon ?class ?visible]
+(defwidget icon-module [icon ?class ?visible]
   (box :class "${class} icon-module"
        :orientation "h"
        :halign "start"
@@ -39,12 +41,14 @@
 (defwidget sidestuff []
   (box :class "sidestuff" :orientation "h" :space-evenly false :halign "end" :spacing 10
   
-    (metric :label "🔊"
-            :value volume
-            :onchange "amixer -D pulse sset Master {}%")
-
     
-    (box :orientation "h" :spacing 2 :space-evenly false :halign "end" (spotify) (docker))))
+    (box :orientation "h" :spacing 2 :space-evenly false :halign "end" 
+      (volume)
+      (spotify) 
+      (docker)
+    )
+  )
+)
 
 (defwidget workspaces [] (literal :class "workspaces" :content "${workspace}"))
 
@@ -57,13 +61,27 @@
        :orientation "h"
        :space-evenly false
        :halign "center"
-    {music != "" ? "🎵${music}" : ""}))
+    {music != "" ? "🎵${music}" : ""}
+  )
+)
 
-
-
-
-
-
+(defwidget volume [?class]
+  (box :space-evenly false
+       :class "hover-module ${class}"
+    (revealer-on-hover :class "hl-on-hover"
+                       :var revealVolume
+                       :varname "revealVolume"
+                       :transition "slideleft"
+                       :class "volume"
+          
+      (hovered-sign :var revealVolume 
+      (label  :text "")
+      (label :text  ""))
+      (metric :icon ""
+            :class "volume"
+            :value volume
+            :onchange "amixer -D pulse sset Master {}%")
+      "  🔊  ")))
 
 (defwidget spotify [?class]
   (box :space-evenly false
@@ -92,7 +110,10 @@
       (hovered-sign :var revealDocker 
       (label :class "docker" :text "")
       (label :class "docker" :text  ""))
-      (label :class "docker-text" :text  "  Running: ${dockerContainers}, Images: ${dockerImages} ")
+      (box :space-evenly false 
+        (button :onclick "docker ps -q | xargs docker stop && docker rm $_"  (label :text "    "))
+        (label :class "docker-text" :text  "  Running: ${dockerContainers}, Images: ${dockerImages} ")
+      )
       "    ")))
 
 (defwidget github [?class]

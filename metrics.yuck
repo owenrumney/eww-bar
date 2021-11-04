@@ -1,9 +1,9 @@
-(defwidget metric [label value ?onchange ?onclick]
+(defwidget metric [icon value ?onchange ?onclick ?class]
   (box :orientation "h"
        :class "metric"
        :space-evenly false
-    (button :onclick "${onclick}" (label :class "label" :text label))
-    (scale :class {value > 50 ? value > 75 ? "error" : "warning" : "normal"}
+    (button :onclick "${onclick}" (label :class "label" :text icon))
+    (scale :class {class == "volume" ? "" : value > 50 ? value > 75 ? "error" : "warning" : "normal"}
            :min 0
            :max 101
            :active {onchange != ""}

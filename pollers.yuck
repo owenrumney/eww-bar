@@ -10,6 +10,6 @@
 
 (defpoll interfaceId :interval "60s" "iwgetid | awk '{print $1}'")
 
-(defpoll dockerContainers :interval "10s" "docker ps -qa | wc -l")
+(defpoll dockerContainers :interval "10s" "docker ps -q | wc -l")
 
-(defpoll dockerImages :interval "10s" "docker images -qa | wc -l")
+(defpoll dockerImages :interval "10s" "docker images -q | wc -l")
