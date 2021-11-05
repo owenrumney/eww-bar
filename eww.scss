@@ -6,16 +6,16 @@
 
 //Global Styles
 .bar {
-  background-color: #0d1117;
-  color: #b0b4bc;
+  background-color: $background;
+  color: $foreground;
   padding: 5px;
   font-size: 1em;
   font-family: Hack Regular;
 }
 
 .bottombar {
-  background-color: #0d1117;
-  color: #b0b4bc;
+  background-color: $background;
+  color: $foreground;
   padding: 5px;
   font-size: 1em;
   font-family: Hack Regular;
@@ -39,27 +39,34 @@
 .metric scale trough highlight {
   all: unset;
   background-color: $green;
-  color: #000000;
+  color: $black;
   border-radius: 10px;
 }
 
 .metric scale.warning trough highlight {
   all: unset;
   background-color: $yellow;
-  color: #000000;
+  color: $black;
   border-radius: 10px;
 }
 
 .metric scale.error trough highlight {
   all: unset;
   background-color: $error;
-  color: #000000;
+  color: $black;
+  border-radius: 10px;
+}
+
+.metric scale.volume trough highlight {
+  all: unset;
+  background-color: $lightmagenta;
+  color: $black;
   border-radius: 10px;
 }
 
 .metric scale trough {
   all: unset;
-  background-color: #4e4e4e;
+  background-color: $background-alt;
   border-radius: 50px;
   min-height: 5px;
   min-width: 100px;
@@ -72,7 +79,7 @@
 }
 
 .workspaces {
-  background-color: #21262e;
+  background-color: $background-alt;
   border-radius: 15px;
   padding-left: 10px;
   padding-right: 5px;
@@ -82,51 +89,76 @@
   margin-right: 20px;
 
   button {
-	color: #a89984;
+    color: #a89984;
     margin: 0px 3px;
   }
   button.focused {
-    color: #98971a;
+    color: $green;
   }
   button.urgent {
-	color: #cc241d;
+    color: $urgent;
   }
-
 }
 
 .spotify {
   font-size: 1em;
   // border-radius: 20px;
-  background-color: #98971a;
-  color: #0d1117;
+  background-color: $green;
+  color: $background;
 }
 
 .spotify-text {
   font-size: 1em;
-  background-color: #98971a;
-  color: #0d1117;
-  
+  background-color: $green;
+  color: $green;
 }
 
 .docker {
   font-family: "Font Awesome 5 Brands";
   // border-radius: 20px;
   font-size: 1em;
-  background-color: #0db7ed;
-  color: #0d1117;
+  background-color: $blue;
+  color: $background;
 }
 
 .github {
   font-family: "Font Awesome 5 Brands";
   font-size: 1em;
-  background-color: #fff;
-  color: #0d1117;
+  background-color: $gray;
+  color: $background;
 }
 
 .github-text {
   font-family: "Font Awesome 5 Brands";
   font-size: 1em;
-  background-color: #fff;
-  color: #0d1117;
+  background-color: $lightgray;
+  color: $black;
   padding-top: 0.5em;
+}
+
+.volume {
+  font-family: "Font Awesome 5 Brands";
+  font-size: 1em;
+  border: 1px solid $gray;
+  color: $foreground;
+}
+
+.uplink {
+  color: $lightmagenta;
+}
+
+.veryuplink {
+  color: $red;
+}
+
+.noactive {
+  color: $white;
+}
+
+.downlink {
+  color: $lightcyan;
+}
+
+.verydownlink {
+  color: $green;
 }

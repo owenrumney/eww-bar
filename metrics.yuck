@@ -3,7 +3,7 @@
        :class "metric"
        :space-evenly false
     (button :onclick "${onclick}" (label :class "label" :text icon))
-    (scale :class {class == "volume" ? "" : value > 50 ? value > 75 ? "error" : "warning" : "normal"}
+    (scale :class {class != "" ? class : value > 50 ? value > 75 ? "error" : "warning" : "normal"}
            :min 0
            :max 101
            :active {onchange != ""}

@@ -84,7 +84,7 @@
             :class "volume"
             :value volume
             :onchange "amixer -D pulse sset Master {}%")
-      "  🔊  ")))
+      "    ")))
 
 (defwidget spotify [?class]
   (box :space-evenly false
@@ -132,15 +132,26 @@
                        :transition "slideleft"
                        :class "github"
           
-      (hovered-sign :var revealGithub       (label :class "github" :text "")       (label  :class "github" :text  ""))
+      (hovered-sign :var revealGithub (label :class "github" :text "")       (label  :class "github" :text  ""))
       (literal :class "github-text" :content "${githubInfo}")
       "    ")
   )
 )
 
 (defwidget network []  
-  (label :text "${wirelessId}: ${round(EWW_NET[interfaceId].NET_UP / 1000000, 2)}  ${round(EWW_NET[interfaceId].NET_DOWN / 1000000, 2)} ")
+  (box :orientation "h" :space-evenly false (label :text "${wirelessId}: ${round(EWW_NET[interfaceId].NET_UP / 1000000, 2)}")
+    (label :class {round(EWW_NET[interfaceId].NET_UP / 1000000, 2) > 0.2 ?
+      round(EWW_NET[interfaceId].NET_UP / 1000000, 2) > 5 ? 
+      "veryuplink" : "uplink" : "noactive"} :text  "  "
+    )
+   (label :text "${round(EWW_NET[interfaceId].NET_DOWN / 1000000, 2)}")
+   (label :class {round(EWW_NET[interfaceId].NET_DOWN / 1000000, 2) > 0.2 ?
+      round(EWW_NET[interfaceId].NET_DOWN / 1000000, 2) > 10 ? 
+      "verydownlink" : "downlink" : "noactive"} :text  "  "
+    )
+  )
 )
+;
 
 (defwindow bar
   :monitor 0
