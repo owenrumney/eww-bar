@@ -13,3 +13,5 @@
 (defpoll dockerContainers :interval "10s" "docker ps -q | wc -l")
 
 (defpoll dockerImages :interval "10s" "docker images -q | wc -l")
+
+(defpoll githubInfo :interval "90m" "github-info aquasecurity:tfsec,aquasecurity:cfsec,owenrumney:go-sarif,owenrumney:squealer")

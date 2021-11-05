@@ -1,3 +1,5 @@
+@import "gruvbox.scss";
+
 * {
   all: unset; //Unsets everything so you can style everything from scratch
 }
@@ -36,21 +38,21 @@
 
 .metric scale trough highlight {
   all: unset;
-  background-color: #98971a;
+  background-color: $green;
   color: #000000;
   border-radius: 10px;
 }
 
 .metric scale.warning trough highlight {
   all: unset;
-  background-color: #d79921;
+  background-color: $yellow;
   color: #000000;
   border-radius: 10px;
 }
 
 .metric scale.error trough highlight {
   all: unset;
-  background-color: #cc241d;
+  background-color: $error;
   color: #000000;
   border-radius: 10px;
 }
@@ -119,4 +121,12 @@
   font-size: 1em;
   background-color: #fff;
   color: #0d1117;
+}
+
+.github-text {
+  font-family: "Font Awesome 5 Brands";
+  font-size: 1em;
+  background-color: #fff;
+  color: #0d1117;
+  padding-top: 0.5em;
 }

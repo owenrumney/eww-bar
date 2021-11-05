@@ -13,7 +13,7 @@
     (sidestuff)))
 
 (defwidget bottombar []
-  (centerbox :orientation "h" :space-evenly false
+  (centerbox :orientation "h"
   (box :halign "start" :orientation "h" :space-evenly false (workspaces))
   (box :halign "end" :orientation "h" :space-evenly false)
    (box :orientation "h" :halign "end" :space-evenly false
@@ -29,6 +29,10 @@
   )
 )
 
+(defwidget workspaces [] 
+  (literal :class "workspaces" :content "${workspace}")
+)
+
 (defwidget icon-module [icon ?class ?visible]
   (box :class "${class} icon-module"
        :orientation "h"
@@ -40,21 +44,20 @@
 
 (defwidget sidestuff []
   (box :class "sidestuff" :orientation "h" :space-evenly false :halign "end" :spacing 10
-  
-    
     (box :orientation "h" :spacing 2 :space-evenly false :halign "end" 
       (volume)
       (spotify) 
       (docker)
+      (github)
     )
   )
 )
 
-(defwidget workspaces [] (literal :class "workspaces" :content "${workspace}"))
-
 (defwidget weather [] 
   (icon-module :icon "${weather.icon}" 
-    (label :text "${weather.description}")))
+    (label :text "${weather.description}")
+  )
+)
 
 (defwidget music []
   (box :class "music"
@@ -96,7 +99,9 @@
       (label :class "spotify" :text "")
       (label :class "spotify" :text  ""))
       (label :class "spotify" :text  " ${music} ")
-      "    ")))
+      "    ")
+  )
+)
 
 (defwidget docker [?class]
   (box :space-evenly false
@@ -114,7 +119,9 @@
         (button :onclick "docker ps -q | xargs docker stop && docker rm $_"  (label :text "    "))
         (label :class "docker-text" :text  "  Running: ${dockerContainers}, Images: ${dockerImages} ")
       )
-      "    ")))
+      "    ")
+  )
+)
 
 (defwidget github [?class]
   (box :space-evenly false
@@ -123,21 +130,17 @@
                        :var revealGithub
                        :varname "revealGithub"
                        :transition "slideleft"
-                       :class "docker"
+                       :class "github"
           
-      (hovered-sign :var revealDocker 
-      (label :class "docker" :text "<")
-      (label  :class "docker" :text  "<"))
-      (label :class "docker-text" :text  "  Running: ${dockerContainers}, Images: ${dockerImages} ")
-      "    ")))
+      (hovered-sign :var revealGithub       (label :class "github" :text "")       (label  :class "github" :text  ""))
+      (literal :class "github-text" :content "${githubInfo}")
+      "    ")
+  )
+)
 
-
-
-
-
-
-
-(defwidget network []  (label :text "${wirelessId}: ${round(EWW_NET[interfaceId].NET_UP / 1000000, 2)}  ${round(EWW_NET[interfaceId].NET_DOWN / 1000000, 2)} "))
+(defwidget network []  
+  (label :text "${wirelessId}: ${round(EWW_NET[interfaceId].NET_UP / 1000000, 2)}  ${round(EWW_NET[interfaceId].NET_DOWN / 1000000, 2)} ")
+)
 
 (defwindow bar
   :monitor 0
@@ -161,11 +164,3 @@
   :reserve (struts :side "bottom" :distance "4%")
   (bottombar))
 
-(defwidget icon-module [icon ?class ?visible]
-  (box :class "${class} icon-module"
-       :orientation "h"
-       :halign "end"
-       :space-evenly false
-       :visible {visible ?: true} ; because the argument is optional
-    (label :class "icon-module__icon" :text "${icon}")
-    (children)))
