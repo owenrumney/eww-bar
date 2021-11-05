@@ -1,8 +1,8 @@
-(defwidget metric [icon value ?onchange ?onclick ?class]
+(defwidget metric [icon value ?onchange ?onclick ?class ?height ?width]
   (box :orientation "h"
        :class "metric"
        :space-evenly false
-    (button :onclick "${onclick}" (label :class "label" :text icon))
+    (termbutton :command "${onclick}" :height "1000" :width "1000"  :text "${icon}")
     (scale :class {class != "" ? class : value > 50 ? value > 75 ? "error" : "warning" : "normal"}
            :min 0
            :max 101

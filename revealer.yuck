@@ -24,3 +24,21 @@
                   :duration {duration ?: "500ms"}
           (children :nth 1))
         (box :class "${class}" (children :nth 2))))))
+
+
+(defwidget clickbox [var varname ?class ?duration ?transition]
+  (box :class "${class} clickbox" :orientation "h" :space-evenly false
+    (button :onclick "eww update ${varname}=${ var ? false : true }"
+      (children :nth 0)
+    )
+      (revealer :reveal var
+      :transition {transition ?: "slideleft"}
+      :duration {duration ?: "500ms"}
+      (box :class "${class}"
+      :space-evenly false
+      (children :nth 1)
+      (button :onclick "eww update ${varname}=false" :class "close" (label :text "Close"))
+      )
+    )
+  )
+)

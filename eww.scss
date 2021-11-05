@@ -81,6 +81,8 @@
 .workspaces {
   background-color: $background-alt;
   border-radius: 15px;
+  margin-left: 5px;
+  margin-top: 5px;
   padding-left: 10px;
   padding-right: 5px;
 
@@ -119,6 +121,8 @@
   font-size: 1em;
   background-color: $blue;
   color: $background;
+  padding-left: 5px;
+  padding-right: 5px;
 }
 
 .github {
@@ -133,7 +137,7 @@
   font-size: 1em;
   background-color: $lightgray;
   color: $black;
-  padding-top: 0.5em;
+  padding-top: 0.7em;
 }
 
 .volume {
@@ -161,4 +165,16 @@
 
 .verydownlink {
   color: $green;
+}
+
+.close {
+  background-color: $red;
+  color: $background;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+button:hover {
+  text-decoration: underline;
+  color: white;
 }
