@@ -5,11 +5,9 @@ import (
 	"fmt"
 	"net/http"
 	"os"
-	"path/filepath"
 	"strings"
 
 	"github.com/google/go-github/v39/github"
-	"golang.org/x/oauth2"
 )
 
 type gitInfo struct {
@@ -34,7 +32,7 @@ func main() {
 	}
 
 	checkers := strings.Split(os.Args[1], ",")
-	client := github.NewClient(getTokenContext(ctx))
+	client := github.NewClient(http.DefaultClient)
 
 	for _, toCheck := range checkers {
 		parts := strings.Split(toCheck, ":")
@@ -45,16 +43,21 @@ func main() {
 		org := parts[0]
 		repo := parts[1]
 
-		repository, _, err := client.Repositories.Get(ctx, org, repo)
+		repositories, _, err := client.Search.Repositories(ctx, fmt.Sprintf("%s/%s", org, repo), nil)
 		if err != nil {
 			panic(err)
 		}
 
-		gitDeets[repo] = gitInfo{
-			org:    org,
-			stars:  repository.GetStargazersCount(),
-			issues: repository.GetOpenIssues(),
+		for _, repository := range repositories.Repositories {
+			if repository.GetName() == repo {
+				gitDeets[repo] = gitInfo{
+					org:    org,
+					stars:  repository.GetStargazersCount(),
+					issues: repository.GetOpenIssues(),
+				}
+			}
 		}
+
 	}
 
 	fmt.Print(`(box :orientation "h" :space-evenly false`)
@@ -64,32 +67,4 @@ func main() {
 		fmt.Printf(`(button :onclick "xdg-open https://github.com/%s/%s" (label :text " %s: %s %d %s %d  | "))  `, info.org, repo, repo, starIcon, info.stars, issueIssue, info.issues)
 	}
 	fmt.Print(")")
-}
-
-func getTokenContext(ctx context.Context) *http.Client {
-	githubToken, ok := os.LookupEnv("GITHUB_TOKEN")
-	if !ok {
-		githubToken = tryTokenFile()
-	}
-
-	ts := oauth2.StaticTokenSource(
-		&oauth2.Token{AccessToken: githubToken},
-	)
-	tc := oauth2.NewClient(ctx, ts)
-	return tc
-}
-
-func tryTokenFile() string {
-	homeDir, err := os.UserHomeDir()
-	if err != nil {
-		panic(err)
-	}
-
-	tokenFile := filepath.Join(homeDir, ".token")
-	token, err := os.ReadFile(tokenFile)
-	if err != nil {
-		panic("Did not find GITHUB_TOKEN")
-	}
-
-	return strings.TrimSpace(string(token))
 }

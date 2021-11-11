@@ -1,6 +1,6 @@
 (defwidget termbutton [command ?text ?floating ?width ?height]
-    (button :onclick "kitty -- sh -c '${floating == false ? "" : "i3-msg floating enable && clear && i3-msg resize set ${width == "" ? "800" : "${width}" }px ${height == "" ? "600" : "${height}" }px && i3-msg move position center &&" } ${command}'"
-        (label :text text)
-        (children)
-    )
+  (button :onclick "kitty -- sh -c '${floating == false ? "" : "i3-msg floating enable && clear && i3-msg resize set ${width == "" ? "800" : "${width}" }px ${height == "" ? "600" : "${height}" }px && i3-msg move position center && " } ${command}'"
+    (label :text text)
+    (children)
+  )
 )

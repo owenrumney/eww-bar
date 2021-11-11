@@ -1,4 +1,4 @@
-; Add the includes 
+; Add the includes
 
 (include "controls.yuck")
 (include "listeners.yuck")
@@ -10,163 +10,175 @@
 (defwidget bar []
   (centerbox :orientation "h"
     (box :orientation "h" :space-evenly false (workspaces) )
-    (box :orientation "h" :space-evenly false (label :text " ${time} - ")  (weather) )
-    (sidestuff)))
+    (box :orientation "h" :space-evenly false (label :text " ${time} - ") (weather) )
+    (sidestuff)
+  )
+)
 
 (defwidget bottombar []
   (centerbox :orientation "h"
-  (box :halign "start" :orientation "h" :space-evenly false (workspaces))
-  (box :halign "end" :orientation "h" :space-evenly false)
-   (box :orientation "h" :halign "end" :space-evenly false
-        (metric :icon ""
-               :onclick "htop --sort-key PERCENT_MEM"
-               :value {EWW_RAM.used_mem_perc})
-        (metric :icon ""
-               :onclick "htop --sort-key PERCENT_CPU"
-               :value {EWW_CPU.avg})
-        (metric  :icon ""
-              :onclick "mc"
-               :value "${round(EWW_DISK["/"].used_perc, 0)}")
-        (network)
+    (box :halign "start" :orientation "h" :space-evenly false (workspaces))
+    (box :halign "end" :orientation "h" :space-evenly false)
+    (box :orientation "h" :halign "end" :space-evenly false
+      (metric :icon ""
+        :onclick "htop --sort-key PERCENT_MEM"
+      :value {EWW_RAM.used_mem_perc})
+      (metric :icon ""
+        :onclick "htop --sort-key PERCENT_CPU"
+      :value {EWW_CPU.avg})
+      (metric :icon ""
+        :onclick "mc"
+        :value "${round(EWW_DISK["/"].used_perc, 0)}")
+      (network)
     )
   )
 )
 
-(defwidget workspaces [] 
+(defwidget workspaces []
   (literal :class "workspaces" :content "${workspace}")
 )
 
 (defwidget icon-module [icon ?class ?visible]
   (box :class "${class} icon-module"
-       :orientation "h"
-       :halign "start"
-       :space-evenly false
-       :visible {visible ?: true} ; because the argument is optional
+    :orientation "h"
+    :halign "start"
+    :space-evenly false
+    :visible {visible ?: true} ; because the argument is optional
     (label :class "icon-module__icon" :text "${icon}")
-    (children)))
+    (children)
+  )
+)
 
 (defwidget sidestuff []
   (box :class "sidestuff" :orientation "h" :space-evenly false :halign "end" :spacing 10
-    (box :orientation "h" :spacing 2 :space-evenly false :halign "end" 
+    (box :orientation "h" :spacing 2 :space-evenly false :halign "end"
       (volume)
-      (spotify) 
+      (spotify)
       (docker)
       (github)
     )
   )
 )
 
-(defwidget weather [] 
-  (icon-module :icon "${weather.icon}" 
+(defwidget weather []
+  (icon-module :icon "${weather.icon}"
     (label :text "${weather.description}")
   )
 )
 
 (defwidget music []
   (box :class "music"
-       :orientation "h"
-       :space-evenly false
-       :halign "center"
+    :orientation "h"
+    :space-evenly false
+    :halign "center"
     {music != "" ? "🎵${music}" : ""}
   )
 )
 
 (defwidget volume [?class]
   (box :space-evenly false
-       :class "hover-module ${class}"
+    :class "hover-module ${class}"
     (revealer-on-hover :class "hl-on-hover"
-                       :var revealVolume
-                       :varname "revealVolume"
-                       :transition "slideleft"
-                       :class "volume"
-          
-      (hovered-sign :var revealVolume 
-      (label  :text "")
-      (label :text  ""))
+      :var revealVolume
+      :varname "revealVolume"
+      :transition "slideleft"
+      :class "volume"
+      
+      (hovered-sign :var revealVolume
+        (label :text "")
+        (label :text "")
+      )
       (metric :icon ""
-            :class "volume"
-            :value volume
-            :onchange "amixer -D pulse sset Master {}%")
-      "    ")))
+        :class "volume"
+        :value volume
+      :onchange "amixer -D pulse sset Master {}%")
+    "  ")
+  )
+)
 
 (defwidget spotify [?class]
   (box :space-evenly false
-       :class "hover-module ${class}"
+    :class "hover-module ${class}"
     (revealer-on-hover :class "hl-on-hover"
-                       :var revealSpotify
-                       :varname "revealSpotify"
-                       :transition "slideleft"
-                       :class "spotify"
-          
-      (hovered-sign :var revealSpotify 
-      (label :class "spotify" :text "")
-      (label :class "spotify" :text  ""))
-      (label :class "spotify" :text  " ${music} ")
-      "    ")
+      :var revealSpotify
+      :varname "revealSpotify"
+      :transition "slideleft"
+      :class "spotify"
+      
+      (hovered-sign :var revealSpotify
+        (label :class "spotify" :text "")
+        (label :class "spotify" :text "")
+      )
+      (button :onclick "playerctl play-pause" (label :class "spotify" :text " ${music} "))
+    "  - ${ musicStatus == "Playing" ? "" : "" } ")
   )
 )
 
 (defwidget docker []
   (clickbox :var revealDocker :varname "revealDocker" :transition "slideleft"
-    (label :class "docker" :text "   ${dockerContainers} "   )
+    (label :class "docker" :text "  ${dockerContainers} "  )
     (box
-    :class "docker"
-    :space-evenly false
-    :spacing 10
-
-    (termbutton :command "eww update revealDocker=false && lazydocker" :class "ok" :width "1400"  :text " Lazydocker")
-    ;(button :onclick "eww update revealDocker=false && docker system prune -f" :class "good" (label :text " Reclaim space"))
-    (button :onclick "eww update revealDocker=false && (docker ps -qa | xargs docker stop || true) " :class "warning" (label :text " Stop all containers"))
+      :class "docker"
+      :space-evenly false
+      :spacing 10
+      
+      (termbutton :command "eww update revealDocker=false && lazydocker" :class "ok" :width "1400" :text " Lazydocker" :floating true)
+      ;(button :onclick "eww update revealDocker=false && docker system prune -f" :class "good" (label :text " Reclaim space")
+        
+        (button :onclick "eww update revealDocker=false && (docker ps -qa | xargs docker stop || true) " :class "warning" (label :text " Stop all containers")        )
+      )
     )
   )
-)
-
-(defwidget github []
-  (clickbox :var revealGithub :varname "revealGithub" :transition "slideleft"
-    (label :class "github" :text "    "   )
-    (box
-    :class "github"
-    :space-evenly false
-    :spacing 10
-      (literal :class "github-text" :content "${githubInfo}")
+  
+  (defwidget github []
+    (clickbox :var revealGithub :varname "revealGithub" :transition "slideleft"
+      (label :class "github" :text "  "  )
+      (box
+        :class "github"
+        :space-evenly false
+        :spacing 10
+        (literal :class "github-text" :content "${githubInfo}")
+      )
     )
   )
-)
-
-(defwidget network []  
-  (box :orientation "h" :space-evenly false (label :text "${wirelessId}: ${round(EWW_NET[interfaceId].NET_UP / 1000000, 2)}")
-    (label :class {round(EWW_NET[interfaceId].NET_UP / 1000000, 2) > 0.1 ?
-      round(EWW_NET[interfaceId].NET_UP / 1000000, 2) > 5 ? 
-      "veryuplink" : "uplink" : "noactive"} :text  "  "
-    )
-   (label :text "${round(EWW_NET[interfaceId].NET_DOWN / 1000000, 2)}")
-   (label :class {round(EWW_NET[interfaceId].NET_DOWN / 1000000, 2) > 0.1 ?
-      round(EWW_NET[interfaceId].NET_DOWN / 1000000, 2) > 10 ? 
-      "verydownlink" : "downlink" : "noactive"} :text  "  "
+  
+  (defwidget network []
+    (box :orientation "h" :space-evenly false (label :text "${wirelessId}: ${round(EWW_NET[interfaceId].NET_UP / 1000000, 2)}")
+      (label :class {round(EWW_NET[interfaceId].NET_UP / 1000000, 2) > 0.1 ?
+        round(EWW_NET[interfaceId].NET_UP / 1000000, 2) > 5 ?
+        "veryuplink" : "uplink" : "noactive"} :text "  "
+      )
+      (label :text "${round(EWW_NET[interfaceId].NET_DOWN / 1000000, 2)}")
+      (label :class {round(EWW_NET[interfaceId].NET_DOWN / 1000000, 2) > 0.1 ?
+        round(EWW_NET[interfaceId].NET_DOWN / 1000000, 2) > 10 ?
+        "verydownlink" : "downlink" : "noactive"} :text "  "
+      )
     )
   )
-)
-;
-
-(defwindow bar
-  :monitor 0
-  :windowtype "dock"
-  :geometry (geometry :x "0%"
-                      :y "0%"
-                      :width "90%"
-                      :height "10px"
-                      :anchor "top center")
-  :reserve (struts :side "top" :distance "4%")
-  (bar))
-
-(defwindow bottombar
-  :monitor 0
-  :windowtype "dock"
-  :geometry (geometry :x "0%"
-                      :y "0%"
-                      :width "90%"
-                      :height "10px"
-                      :anchor "bottom center")
-  :reserve (struts :side "bottom" :distance "4%")
-  (bottombar))
-
+  ;
+  
+  (defwindow bar
+    :monitor 0
+    :windowtype "dock"
+    :geometry (geometry :x "0%"
+      :y "0%"
+      :width "90%"
+      :height "10px"
+    :anchor "top center")
+    :reserve (struts :side "top" :distance "4%")
+    (bar)
+  )
+  
+  (defwindow bottombar
+    :monitor 0
+    :windowtype "dock"
+    :geometry (geometry :x "0%"
+      :y "0%"
+      :width "90%"
+      :height "10px"
+    :anchor "bottom center")
+    :reserve (struts :side "bottom" :distance "4%")
+    (bottombar)
+  )
+  
+  
