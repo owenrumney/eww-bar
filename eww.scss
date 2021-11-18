@@ -115,6 +115,19 @@
   color: $green;
 }
 
+.notifications {
+  font-size: 1em;
+  // border-radius: 20px;
+  background-color: red;
+  color: $background;
+}
+
+.notifications-text {
+  font-size: 1em;
+  background-color: red;
+  color: $green;
+}
+
 .docker {
   font-family: "Font Awesome 5 Brands";
   // border-radius: 20px;

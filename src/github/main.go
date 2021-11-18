@@ -64,7 +64,7 @@ func main() {
 	for repo, info := range gitDeets {
 		_ = repo
 		_ = info
-		fmt.Printf(`(button :onclick "xdg-open https://github.com/%s/%s" (label :text " %s: %s %d %s %d  | "))  `, info.org, repo, repo, starIcon, info.stars, issueIssue, info.issues)
+		fmt.Printf(`(button :onclick "eww update revealGithub=false && xdg-open https://github.com/%s/%s" (label :text " %s: %s %d %s %d  | "))  `, info.org, repo, repo, starIcon, info.stars, issueIssue, info.issues)
 	}
 	fmt.Print(")")
 }

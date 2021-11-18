@@ -8,7 +8,7 @@
 
 (defpoll wirelessId :interval "60s"  "iwgetid -r")
 
-(defpoll interfaceId :interval "60s" "iwgetid | awk '{print $1}'")
+(defpoll interfaceId :interval "60s" "route | grep default | head -n1 | awk '{print $8}'")
 
 (defpoll dockerContainers :interval "10s" "docker ps -q | wc -l")
 

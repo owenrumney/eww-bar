@@ -1,5 +1,13 @@
-(deflisten music :initial "" "playerctl --follow metadata --format '{{ artist }} - {{ title }}' || true")
+(deflisten music
+  :initial ""
+  :onchange "eww update revealSpotify=true && sleep 5 && eww update revealSpotify=false"
+  "playerctl --follow metadata --format '{{ artist }} - {{ title }}' || true")
 
 (deflisten musicStatus "playerctl --follow status || true")
 
 (deflisten workspace "workspaces 0")
+
+(deflisten notifications
+  :initial ""
+  :onchange "eww update revealNotify=true && sleep 5 && eww update revealNotify=false"
+  "notification-listener")

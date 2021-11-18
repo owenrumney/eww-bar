@@ -1,11 +1,12 @@
 ; Add the includes
 
+(include "variables.yuck")
 (include "controls.yuck")
 (include "listeners.yuck")
 (include "metrics.yuck")
 (include "pollers.yuck")
 (include "revealer.yuck")
-(include "variables.yuck")
+
 
 (defwidget bar []
   (centerbox :orientation "h"
@@ -56,6 +57,7 @@
       (spotify)
       (docker)
       (github)
+      (notifications)
     )
   )
 )
@@ -75,6 +77,7 @@
   )
 )
 
+
 (defwidget volume [?class]
   (box :space-evenly false
     :class "hover-module ${class}"
@@ -92,7 +95,26 @@
         :class "volume"
         :value volume
       :onchange "amixer -D pulse sset Master {}%")
-    "  ")
+    "    ")
+  )
+)
+
+
+(defwidget notifications [?class]
+  (box :space-evenly false
+    :class "hover-module ${class}"
+    (revealer-on-hover :class "hl-on-hover"
+      :var revealNotify
+      :varname "revealNotify"
+      :transition "slideleft"
+      :class "notifications"
+
+      (hovered-sign :var revealNotify
+        (label :class "notifications" :text "")
+        (label :class "notifications" :text "")
+      )
+      (button :onclick "playerctl play-pause" (label :class "notifications" :text " ${notifications} "))
+    "    ")
   )
 )
 
@@ -110,7 +132,7 @@
         (label :class "spotify" :text "")
       )
       (button :onclick "playerctl play-pause" (label :class "spotify" :text " ${music} "))
-    "  - ${ musicStatus == "Playing" ? "" : "" } ")
+    "   - ${ musicStatus == "Playing" ? "" : "" }  ")
   )
 )
 
@@ -132,7 +154,7 @@
   
   (defwidget github []
     (clickbox :var revealGithub :varname "revealGithub" :transition "slideleft"
-      (label :class "github" :text "  "  )
+      (label :class "github" :text "    "  )
       (box
         :class "github"
         :space-evenly false
@@ -143,7 +165,7 @@
   )
   
   (defwidget network []
-    (box :orientation "h" :space-evenly false (label :text "${wirelessId}: ${round(EWW_NET[interfaceId].NET_UP / 1000000, 2)}")
+    (box :orientation "h" :space-evenly false (label :text "${interfaceId}: ${round(EWW_NET[interfaceId].NET_UP / 1000000, 2)}")
       (label :class {round(EWW_NET[interfaceId].NET_UP / 1000000, 2) > 0.1 ?
         round(EWW_NET[interfaceId].NET_UP / 1000000, 2) > 5 ?
         "veryuplink" : "uplink" : "noactive"} :text "  "

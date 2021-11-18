@@ -2,3 +2,4 @@
 (defvar revealDocker false)
 (defvar revealGithub false)
 (defvar revealVolume false)
+(defvar revealNotify false)
