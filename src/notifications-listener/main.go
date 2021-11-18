@@ -20,7 +20,7 @@ func main() {
 	call := conn.BusObject().Call("org.freedesktop.DBus.AddMatch", 0,
 		"eavesdrop='true',interface='org.freedesktop.Notifications',member='Notify'")
 	if call.Err != nil {
-		fmt.Fprintln(os.Stderr, "Failed to add match:", call.Err)
+		_, _ = fmt.Fprintln(os.Stderr, "Failed to add match:", call.Err)
 		os.Exit(1)
 	}
 
